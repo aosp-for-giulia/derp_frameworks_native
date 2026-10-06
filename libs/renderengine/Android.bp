@@ -115,7 +115,10 @@ filegroup {
         "skia/filters/MouriMap.cpp",
         "skia/filters/RuntimeEffectManager.cpp",
         "skia/filters/StretchShaderFactory.cpp",
-    ],
+    ] + select(soong_config_variable("dolby_vision", "target_supports_dolby_vision"), {
+        true: ["skia/filters/DolbyVisionShader.cpp"],
+        default: [],
+    }),
 }
 
 // Used to consolidate and simplify pulling Skia & Skia deps into targets that depend on
@@ -151,7 +154,10 @@ cc_library_static {
         "-fvisibility=hidden",
         "-Werror=format",
         "-Wno-unused-parameter",
-    ],
+    ] + select(soong_config_variable("dolby_vision", "target_supports_dolby_vision"), {
+        true: ["-DTARGET_SUPPORTS_DOLBY_VISION"],
+        default: [],
+    }),
     srcs: [
         ":librenderengine_sources",
         ":librenderengine_threaded_sources",

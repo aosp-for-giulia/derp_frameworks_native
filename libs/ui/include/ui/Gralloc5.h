@@ -24,7 +24,11 @@ namespace android {
 
 class Gralloc5Mapper : public GrallocMapper {
 public:
-public:
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+    int32_t getVendorMetadata(buffer_handle_t bufferHandle, const char* name, int64_t type,
+                              void* data, size_t capacity) const;
+#endif
+
     static void preload();
 
     Gralloc5Mapper();

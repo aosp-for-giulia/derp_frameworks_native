@@ -47,6 +47,14 @@ using APixelFormat = aidl::android::hardware::graphics::common::PixelFormat;
 
 namespace android {
 
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+int32_t Gralloc5Mapper::getVendorMetadata(buffer_handle_t handle, const char* name, int64_t type,
+                                        void* data, size_t capacity) const {
+    if (!mMapper || !handle || !name || !data || capacity > INT32_MAX) return BAD_VALUE;
+    return mMapper->v5.getMetadata(handle, {name, type}, data, capacity);
+}
+#endif
+
 static const auto kIAllocatorServiceName = IAllocator::descriptor + std::string("/default");
 static const auto kIAllocatorMinimumVersion = 2;
 constexpr const char* kStandardMetadataName =

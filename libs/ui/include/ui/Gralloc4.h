@@ -33,6 +33,10 @@ namespace android {
 
 class Gralloc4Mapper : public GrallocMapper {
 public:
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+    int32_t getVendorMetadata(buffer_handle_t bufferHandle, const char* name, int64_t type,
+                              void* data, size_t capacity) const;
+#endif
     static void preload();
 
     Gralloc4Mapper();

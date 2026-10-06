@@ -181,6 +181,13 @@ public:
 
     Version getMapperVersion() const { return mMapperVersion; }
 
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+    // Read opaque vendor metadata without assuming a particular mapper HAL version.
+    // Returns the byte count, or a negative status. Never writes more than capacity bytes.
+    int32_t getVendorMetadata(buffer_handle_t bufferHandle, const char* name, int64_t type,
+                              void* data, size_t capacity) const;
+#endif
+
 private:
     friend class Singleton<GraphicBufferMapper>;
 
@@ -196,4 +203,3 @@ private:
 } // namespace android
 
 #endif // ANDROID_UI_BUFFER_MAPPER_H
-

@@ -44,6 +44,9 @@
 #include "compat/SkiaGpuContext.h"
 #include "debug/SkiaCapture.h"
 #include "filters/BlurFilter.h"
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+#include "filters/DolbyVisionShader.h"
+#endif
 #include "filters/EdgeExtensionShaderFactory.h"
 #include "filters/GainmapFactory.h"
 #include "filters/LutShader.h"
@@ -144,6 +147,9 @@ protected:
     };
 
     RuntimeEffectManager mRuntimeEffectManager;
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+    DolbyVisionShader mDolbyVisionShader;
+#endif
 
     // Graphics context used for creating surfaces and submitting commands.
     // Unlike mProtectedContext, mContext cannot be marked private because it
@@ -218,6 +224,9 @@ private:
         const SkRect& imageBounds;
         std::optional<skhdr::AdaptiveGlobalToneMap> agtm;
         ftl::Flags<ColorSpaceOptions> colorSpaceOptions;
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+        bool dolbyApplied = false;
+#endif
     };
     sk_sp<SkShader> createRuntimeEffectShader(const RuntimeEffectShaderParameters&);
 

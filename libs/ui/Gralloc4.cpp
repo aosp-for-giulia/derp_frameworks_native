@@ -60,6 +60,22 @@ using MetadataTypeDescription =
 
 namespace android {
 
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+int32_t Gralloc4Mapper::getVendorMetadata(buffer_handle_t handle, const char* name, int64_t type,
+                                        void* data, size_t capacity) const {
+    if (!mMapper || !handle || !name || !data || capacity > INT32_MAX) return BAD_VALUE;
+    int32_t result = BAD_VALUE;
+    auto ret = mMapper->get(const_cast<native_handle_t*>(handle), {name, type},
+                           [&](auto error, const auto& bytes) {
+                               if (error != hardware::graphics::mapper::V4_0::Error::NONE) return;
+                               if (bytes.size() > capacity) return;
+                               memcpy(data, bytes.data(), bytes.size());
+                               result = static_cast<int32_t>(bytes.size());
+                           });
+    return ret.isOk() ? result : DEAD_OBJECT;
+}
+#endif
+
 namespace {
 
 static constexpr Error kTransactionError = Error::NO_RESOURCES;

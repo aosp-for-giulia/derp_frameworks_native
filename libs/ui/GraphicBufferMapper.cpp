@@ -53,6 +53,22 @@ using LockResult = GraphicBufferMapper::LockResult;
 
 ANDROID_SINGLETON_STATIC_INSTANCE( GraphicBufferMapper )
 
+#ifdef TARGET_SUPPORTS_DOLBY_VISION
+int32_t GraphicBufferMapper::getVendorMetadata(buffer_handle_t handle, const char* name, int64_t type,
+                                             void* data, size_t capacity) const {
+    switch (mMapperVersion) {
+        case Version::GRALLOC_4:
+            return static_cast<const Gralloc4Mapper&>(*mMapper).getVendorMetadata(
+                    handle, name, type, data, capacity);
+        case Version::GRALLOC_5:
+            return static_cast<const Gralloc5Mapper&>(*mMapper).getVendorMetadata(
+                    handle, name, type, data, capacity);
+        default:
+            return INVALID_OPERATION;
+    }
+}
+#endif
+
 static bool requireMapper4() {
 #ifdef LEGACY_GRALLOC
     return false;

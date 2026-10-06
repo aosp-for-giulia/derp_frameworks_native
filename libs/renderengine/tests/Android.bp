@@ -23,6 +23,14 @@ package {
 }
 
 cc_test {
+    name: "dolby_vision_metadata_test",
+    host_supported: true,
+    srcs: ["DolbyVisionMetadataTest.cpp"],
+    cflags: ["-Wall", "-Werror"],
+    test_suites: ["device-tests"],
+}
+
+cc_test {
     name: "librenderengine_test",
     defaults: [
         "android.hardware.graphics.composer3-ndk_shared",
